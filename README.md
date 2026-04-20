@@ -1,4 +1,4 @@
-# STT Messenger | CA3 Software Testing Case Study
+# STT Messenger | Software Testing Tools Case Study
 
 STT Messenger is a high fidelity demonstration project for the Software Testing Case Study. It showcases how modern social media platforms can use rigorous testing methodologies to protect minors and vulnerable populations from toxic content and privacy leaks online.
 
