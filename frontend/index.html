@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STT Messenger | CA3 Secure Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4ade80;
+            --bg: #080808;
+            --surface: #121212;
+            --border: #222;
+            --text: #eee;
+            --dim: #777;
+            --bubble-own: #14532d;
+            --bubble-other: #1f2937;
+            --error: #f87171;
+            --blocked-bg: #450a0a;
+        }
+        * { box-sizing: border-box; }
+        body, html {
+            margin: 0; padding: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .app-header {
+            height: 70px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            flex-shrink: 0;
+        }
+        .lab-controls { display: flex; align-items: center; gap: 10px; }
+        select {
+            background: #1a1a1a;
+            color: #fff;
+            border: 1px solid var(--border);
+            padding: 8px;
+            border-radius: 6px;
+            min-width: 250px;
+        }
+        .chat-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: #0a0a0a;
+        }
+        .message {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            position: relative;
+        }
+        .message.own { align-self: flex-end; background: var(--bubble-own); }
+        .message.other { align-self: flex-start; background: var(--bubble-other); }
+        .message.blocked {
+            background: var(--blocked-bg) !important;
+            border: 1px solid var(--error);
+            color: var(--error);
+            text-decoration: line-through;
+        }
+        .message.blocked::after {
+            content: " [" attr(data-reason) "]";
+            font-size: 0.7rem;
+            margin-left: 10px;
+        }
+        .sender-tag { font-size: 0.6rem; color: var(--dim); margin-bottom: 3px; display: block; }
+        .empty-state { margin: auto; text-align: center; color: #444; }
+        .app-footer {
+            height: 90px;
+            padding: 0 40px;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        input {
+            flex: 1;
+            background: #1a1a1a;
+            border: 1px solid var(--border);
+            padding: 12px;
+            border-radius: 10px;
+            color: #fff;
+            outline: none;
+        }
+        .btn {
+            background: var(--primary);
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .btn-dim { background: #333; color: #fff; }
+        .toast {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--error);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 30px;
+            display: none;
+            z-index: 5000;
+        }
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 6000;
+        }
+        .modal-content {
+            background: #111;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 450px;
+            border: 1px solid var(--primary);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="toast" class="toast">Security Rejection</div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <h3 id="modalTitle">Security Lab</h3>
+            <p id="modalDesc" style="color: #aaa; margin-bottom: 20px;"></p>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn" style="flex: 1;" onclick="executeTest()">Run Demo</button>
+                <button class="btn btn-dim" style="flex: 1;" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <header class="app-header">
+        <div class="logo" style="font-weight: 600; color: var(--primary);">STT MESSENGER</div>
+        <div class="lab-controls">
+            <select id="scenarioSelector" onchange="handleScenarioChange(this)">
+                <option value="">- SELECT TEST CASE -</option>
+                <option value="toxic">TC-01: Toxic Filter</option>
+                <option value="pii">TC-02: PII Protector</option>
+                <option value="payload">TC-03: Max Payload</option>
+                <option value="sentiment">TC-04: Sentiment Guard</option>
+                <option value="injection">TC-05: System Guard</option>
+                <option value="scam">TC-06: Scam Protector</option>
+                <option value="spam">TC-07: Bot Rate Limiter</option>
+                <option value="xss">TC-08: XSS Injection</option>
+                <option value="ip">TC-09: IP Sovereignty Leak</option>
+                <option value="malware">TC-10: Malware Signature</option>
+                <option value="doxing">TC-11: Doxing Protection</option>
+                <option value="crisis">TC-12: Crisis Intercept</option>
+            </select>
+            <button class="btn btn-dim" onclick="resetLab()">Reset</button>
+        </div>
+    </header>
+
+    <main class="chat-container" id="msgBox">
+        <div class="empty-state">
+            <h1>Blank Secure Canvas</h1>
+            <p>Select a scenario to verify logic.</p>
+        </div>
+    </main>
+
+    <footer class="app-footer">
+        <span id="personaDisplay" style="padding: 4px 10px; border-radius: 20px; border: 1px solid var(--primary); color: var(--primary); font-size: 0.7rem;">USER 1</span>
+        <input type="text" id="userInput" placeholder="Signal message..." onkeydown="if(event.key==='Enter') sendManual()">
+        <button class="btn" onclick="sendManual()">SEND</button>
+    </footer>
+
+    <script>
+        (function() {
+            var API = "http://127.0.0.1:8000";
+            var currentHash = "user1_hash";
+            var msgCount = 0;
+            var activeTest = null;
+
+            var scenarios = {
+                toxic: ["Toxic Filter", "Testing Equivalence Partitioning.", "That bastard is lucky."],
+                pii: ["PII Protector", "Testing Privacy Gating.", "My phone is 9850593788"],
+                payload: ["Max Payload", "Testing Boundary Values.", "A".repeat(10001)],
+                sentiment: ["Sentiment Guard", "Testing Hostility Heuristics.", "I will destroy you"],
+                injection: ["System Guard", "Testing Privilege Gating.", "/sudo rm -rf /"],
+                scam: ["Scam Protector", "Testing Fraud Signatures.", "Claim at crypto.xyz"],
+                spam: ["Bot Rate Limiter", "Testing Temporal Slop.", "BOT_BURST"],
+                xss: ["XSS Injection", "Testing Input Sanitization.", "S_T_A_R_T_<script>alert(1)</" + "script>"],
+                ip: ["IP Sovereignty Leak", "Testing Network Privacy.", "My IP is 192.168.1.1"],
+                malware: ["Malware Signature", "Testing URI Auditing.", "Patch at patch.exe"],
+                doxing: ["Doxing Protection", "Testing Contextual PII.", "I live at 422 Secure St"],
+                crisis: ["Crisis Intercept", "Testing Proactive Safety.", "I want to end it all."]
+            };
+
+            window.handleScenarioChange = function(el) {
+                if (!el.value) return;
+                activeTest = scenarios[el.value];
+                document.getElementById('modalTitle').innerText = activeTest[0];
+                document.getElementById('modalDesc').innerText = activeTest[1];
+                document.getElementById('modal').style.display = 'flex';
+            };
+
+            window.closeModal = function() {
+                document.getElementById('modal').style.display = 'none';
+                document.getElementById('scenarioSelector').value = "";
+            };
+
+            window.executeTest = function() {
+                closeModal();
+                if (activeTest[2] === "BOT_BURST") {
+                    var i = 0;
+                    var interval = setInterval(function() {
+                        postSignal("Bot Burst Sequence " + (i + 1));
+                        i++;
+                        if (i >= 5) clearInterval(interval);
+                    }, 200);
+                } else {
+                    postSignal(activeTest[2]);
+                }
+            };
+
+            window.sendManual = function() {
+                var input = document.getElementById('userInput');
+                if (input.value) {
+                    postSignal(input.value);
+                    input.value = '';
+                }
+            };
+
+            window.resetLab = function() {
+                if (confirm("Wipe all data?")) {
+                    fetch(API + "/reset", { method: 'POST' }).then(function() {
+                        msgCount = 0;
+                        fetchMessages(true);
+                    });
+                }
+            };
+
+            function fetchMessages(force) {
+                fetch(API + "/messages").then(function(res) {
+                    return res.json();
+                }).then(function(data) {
+                    var box = document.getElementById('msgBox');
+                    if (data.length === 0 && !box.querySelector('.message')) {
+                        box.innerHTML = '<div class="empty-state"><h1>Blank Secure Canvas</h1><p>Select a scenario.</p></div>';
+                        msgCount = 0;
+                        return;
+                    }
+                    if (data.length === msgCount && !force) return;
+                    box.innerHTML = '';
+                    data.forEach(function(m) {
+                        var div = document.createElement('div');
+                        div.className = "message " + (m.sender_hash === currentHash ? "own" : "other");
+                        var txt = m.content.startsWith('ENC:') ? m.content.substring(4) : m.content;
+                        div.innerHTML = '<span class="sender-tag">' + m.sender_hash.substring(0, 8) + '...</span>' + txt;
+                        box.appendChild(div);
+                    });
+                    msgCount = data.length;
+                    box.scrollTop = box.scrollHeight;
+                }).catch(function() {});
+            }
+
+            function postSignal(content) {
+                var box = document.getElementById('msgBox');
+                if (box.querySelector('.empty-state')) box.innerHTML = '';
+                var tempDiv = document.createElement('div');
+                tempDiv.className = "message own pending";
+                tempDiv.innerHTML = '<span class="sender-tag">' + currentHash.substring(0, 8) + '...</span>' + content.substring(0, 40) + "...";
+                box.appendChild(tempDiv);
+                box.scrollTop = box.scrollHeight;
+
+                fetch(API + "/messages", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ content: content, sender_hash: currentHash })
+                }).then(function(res) {
+                    if (!res.ok) {
+                        return res.json().then(function(err) {
+                            tempDiv.classList.remove('pending');
+                            tempDiv.classList.add('blocked');
+                            tempDiv.setAttribute('data-reason', err.detail.replace("Security Gate: ", ""));
+                            notify(err.detail);
+                        });
+                    } else {
+                        tempDiv.remove();
+                        fetchMessages(true);
+                    }
+                }).catch(function() {
+                    tempDiv.classList.add('blocked');
+                    notify("Daemon Offline");
+                });
+            }
+
+            function notify(m) {
+                var t = document.getElementById('toast');
+                t.innerText = "⚠️ " + m;
+                t.style.display = 'block';
+                setTimeout(function() { t.style.display = 'none'; }, 4000);
+            }
+
+            setInterval(function() { fetchMessages(false); }, 2000);
+            fetchMessages(true);
+        })();
+    </script>
+</body>
+</html>
