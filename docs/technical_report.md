@@ -1,76 +1,42 @@
-# 📝 Component B: Technical Report - Software Testing Life Cycle (STLC)
+# Technical Report: Software Testing Case Study for Social Media Security
 
-## 🎯 1. Objective of the Activity
-The objective of this case study is to demonstrate the application of high-fidelity software testing methodologies within a modern privacy-first social media ecosystem (**STT Messenger**). 
+## 1. Objective of the Activity
+The objective of this case study is to demonstrate the application of software testing methodologies to secure modern messenger platforms. The activity focuses on protecting vulnerable users from toxic content and private data leakage. This is achieved through black-box and white-box testing of a 12-stage security interceptor.
 
-We specifically explore how rigorous **Black-Box EP/BVA** and **White-Box Path Coverage** can protect minors and vulnerable populations from:
-- **Toxic Content**: Intercepting slurs and hate speech semantically.
-- **Privacy Leakage**: Detecting PII (Phone/Email/IP/Address) before storage.
-- **Hostile Sentiment**: Identifying predatory tones in real-time.
+## 2. System Overview
+STT Messenger is a sovereign communication platform. It utilizes a backend security engine to audit every message before it is committed to the database. The system enforces privacy and safety requirements through a multi-layered interceptor called the SafetyAuditor.
 
----
+## 3. Test Case Matrix
 
-## 🏛️ 2. Comprehensive System Architecture
-STT Messenger utilizes a **NeuroSymbolic Safety Layer** where every signal sent to the local SQLite database must pass through a 12-stage security pipeline called the `SafetyAuditor`.
+| Test Case Number | Test Case Description | Expected Input | Expected Output | Case for Success or Failure |
+| :--- | :--- | :--- | :--- | :--- |
+| TC-01 | Toxic content filter to prevent derogatory slurs and hate speech. | Any string containing a known toxic slur. | HTTP 422 Unprocessable Entity. | Success: Message blocked. Failure: Message stored. |
+| TC-02 | Personal Identifiable Information (PII) gate for phone and email. | Strings containing a 10 digit number or email address. | HTTP 422 Unprocessable Entity. | Success: PII intercepted. Failure: Data leak. |
+| TC-03 | Boundary Value Analysis (BVA) for maximum message payload. | A string with 10001 characters. | HTTP 422 Unprocessable Entity. | Success: Overflow blocked. Failure: Buffer risk. |
+| TC-04 | Sentiment analysis gate to detect hostile and predatory intent. | Sentences containing hostile keywords like murder or destroy. | HTTP 422 Unprocessable Entity. | Success: Hostility blocked. Failure: Tone allowed. |
+| TC-05 | System command injection protection for administrative integrity. | Messages starting with /sudo or rm -rf. | HTTP 422 Unprocessable Entity. | Success: Command blocked. Failure: Escalation. |
+| TC-06 | Scam and phishing protector for social media security. | URLs containing crypto-win or free-airdrop signatures. | HTTP 422 Unprocessable Entity. | Success: Fraud blocked. Failure: Link active. |
+| TC-07 | Temporal bot rate limiter for signal stability. | Five messages sent within a 0.5 second interval. | HTTP 422 Unprocessable Entity. | Success: Flow throttled. Failure: Bot swarm. |
+| TC-08 | Script injection and cross site scripting (XSS) prevention. | Strings containing script tags or onerror event handlers. | HTTP 422 Unprocessable Entity. | Success: Script blocked. Failure: Code execution. |
+| TC-10 | Malware signature detection for untrusted URI patterns. | Strings containing executable extensions like .exe or .sh. | HTTP 422 Unprocessable Entity. | Success: Payload blocked. Failure: Malware leak. |
+| TC-09 | Network identifier protection to prevent IP sovereignty leaks. | Strings containing IPv4 formatted address patterns. | HTTP 422 Unprocessable Entity. | Success: IP blocked. Failure: Trace allowed. |
+| TC-11 | Contextual doxing protection for physical location security. | Phrases combining live at with house numbers and street names. | HTTP 422 Unprocessable Entity. | Success: Location blocked. Failure: Trace allowed. |
+| TC-12 | Proactive safety gate for mental health and crisis support. | Strings containing self harm or crisis indicators. | HTTP 422 Unprocessable Entity. | Success: Support triggered. Failure: Signal stored. |
 
-### 2.1 Key Design Safeguards
-1.  **Input Normalization**: Stripping punctuation and case-consistent auditing to prevent leetspeak bypasses.
-2.  **Sovereign Storage**: Messages are never stored in plaintext; the `ENC:` prefix pattern simulates the Content Sovereignty required for private communication.
+## 4. Test Case Execution Strategy
 
----
+* TC-01 (Toxic Filter): The system normalizes the input by removing special characters and converts text to lowercase. It then performs an intersection check between the message words and a predefined toxic corpus.
+* TC-02 (PII Protector): Execution relies on regex pattern matching for standardized email structures and numeric sequences ranging from 10 to 12 digits.
+* TC-03 (Max Payload): The logic executes a length check on the raw string before any normalization. If the character count exceeds the 10000 limit defined in the protocol, the message is rejected.
+* TC-04 (Sentiment Guard): The auditor scans for specific hostile indicators. This strategy uses a keyword weight system to identify predatory intent that does not necessarily contain slurs.
+* TC-05 (System Guard): The logic checks if the string prefix matches known administrative commands. This prevents users from attempting privilege escalation within the chat interface.
+* TC-06 (Scam Protector): The strategy involves signature correlation. It checks for common phishing domain extensions and fraudulent reward keywords used in social media scams.
+* TC-07 (Bot Rate Limiter): The system maintains a sliding window of message timestamps for each user hash. If more than three messages occur within 10 seconds, the gate triggers a rate limit rejection.
+* TC-08 (XSS Injection): The auditor targets HTML tags and JavaScript event handlers. It searches for specific patterns such as onclick or script to prevent browser-side code execution.
+* TC-09 (IP Sovereign): The system uses a specialized IPv4 regex to detect dot-decimal notation. This ensures that users do not inadvertently leak their network coordinates.
+* TC-10 (Malware Signature): The logic monitors for executable file extensions. If a URL or text string includes patterns like .exe or .vbs, it is flagged as a malicious payload attempt.
+* TC-11 (Doxing Prevention): This strategy uses contextual heuristics. It looks for a high correlation between residence keywords (flat, room, house) and numerical sequences within the same string.
+* TC-12 (Crisis Intercept): The system monitors for high-risk self-harm terminology. Upon detection, it returns a unique safety message designed to redirect the user to support resources.
 
-## 🔬 3. Methodology & Test Case Design
-
-### 3.1 Black-Box Technique: Equivalence Partitioning (EP)
-We partition the entire string input space into valid and invalid classes. For "Minor Protection," any signal belonging to the "Toxic" or "PII" class is redirected to a 422 Rejection.
-
-### 3.2 Black-Box Technique: Boundary Value Analysis (BVA)
-We rigorously test the 10,000-character payload limit. We verify the "Robustness" of the protocol by testing:
-- **Min Boundary**: 1 character (Valid).
-- **Max Boundary**: 10,000 characters (Valid).
-- **Invalid Boundary**: 10,001 characters (Rejected).
-
-### 3.3 White-Box Technique: Control Flow / Path Coverage
-Every `if/else` condition in the `backend/main.py` auditor is exercised by our `tests/test_security` suite, ensuring zero dead code in the security pipeline.
-
----
-
-## 📊 4. The 12-Point Security Matrix (Sample Data)
-
-| Sr.No | Test Case Description | Expected Result | Actual Result | Status |
-|---|---|---|---|---|
-| 1 | Toxic Slur Detection (EP) | 422 Rejection | 422 Rejection | ✅ PASS |
-| 2 | PII Protection (Phone/Email) | 422 Rejection | 422 Rejection | ✅ PASS |
-| 3 | Payload Boundary (10k+1) | 422 Rejection | 422 Rejection | ✅ PASS |
-| 4 | Hostile Sentiment Guard | 422 Rejection | 422 Rejection | ✅ PASS |
-| 5 | System Command Injection | 422 Rejection | 422 Rejection | ✅ PASS |
-| 6 | Scam/Phishing Phing Detection| 422 Rejection | 422 Rejection | ✅ PASS |
-| 7 | Bot Swarm Rate Limiting | 422 Rejection | 422 Rejection | ✅ PASS |
-| 8 | XSS Injection Sanitization | 422 Rejection | 422 Rejection | ✅ PASS |
-| 9 | IP Sovereignty Leak (PII) | 422 Rejection | 422 Rejection | ✅ PASS |
-| 10 | Malware Signature Detection | 422 Rejection | 422 Rejection | ✅ PASS |
-| 11 | Heuristic Doxing Prevention | 422 Rejection | 422 Rejection | ✅ PASS |
-| 12 | Support/Crisis Intercept | 422 Rejection | 422 Rejection | ✅ PASS |
-
----
-
-## 🛑 5. Defect Analysis & Tools Explanation
-
-### 5.1 Defect Lifecycle
-We handle all security bugs through a rigorous 6-phase cycle:
-1. **New**: Found via automated Pytest or manual lab audit.
-2. **Assigned**: Allocated to safety engineers.
-3. **Open**: Root cause analysis in the `backend/main.py` layer.
-4. **Fixed**: Code patch implemented.
-5. **Pending Retest**: Regression suite scheduled.
-6. **Closed**: Verified in the production-ready STT Messenger.
-
-### 5.2 Automation Stack
-- **Selenium**: Essential for verifying that "Blocked" messages correctly display as **struck-through** on the UI, ensuring user transparency.
-- **Bugzilla**: Used to document and audit the history of security intercepts, providing a traceability log for safety auditors.
-- **Pytest**: The core engine for our **Regression Testing**, triggering the 12-stage auditor on every build.
-
----
-
-## 📈 6. Conclusion
-By applying scientific software testing (EP, BVA, Path Coverage) at the **System Level**, we have created a messenger that doesn't just "talk" about safety—it mathematically enforces it.
+## 5. Defect Analysis and Software Testing Life Cycle
+The STT Messenger project follows a formal testing lifecycle. Defects are tracked from identification to closure. Automated regression testing using Pytest ensures that fixed vulnerabilities remain blocked in future releases.

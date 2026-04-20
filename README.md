@@ -1,31 +1,29 @@
 # STT Messenger | CA3 Software Testing Case Study
 
-**STT Messenger** is a high-fidelity demonstration project for the CA3 Software Testing case study. It showcases how modern social media platforms can use rigorous testing methodologies—such as **Equivalence Partitioning (EP)**, **Boundary Value Analysis (BVA)**, and **Path Coverage**—to protect minors and vulnerable populations from toxic content and privacy leaks.
+STT Messenger is a high fidelity demonstration project for the CA3 Software Testing case study. It showcaseshow modern social media platforms can use rigorous testing methodologies to protect minors and vulnerable populations from toxic content and privacy leaks.
 
-## 🚀 Key Features
-- **12-Point Security Matrix**: Comprehensive protection against Slurs, PII, Scams, Malware, XSS, and more.
-- **NeuroSymbolic Safety Auditor**: A backend engine that normalizes and intercepts malicious signals.
-- **Visual Interception UI**: Real-time "Blocked" feedback in the chat interface.
-- **Identity Isolation**: Secure multi-persona simulation.
+## 1. Key Features
+* 12-Point Security Matrix: Comprehensive protection against slurs, PII, scams, malware, and XSS.
+* Safety Auditor: A backend engine that normalizes and intercepts malicious signals.
+* Visual Interception UI: Real time blocked feedback in the chat interface.
 
-## 📁 Repository Structure
-- **`/backend`**: FastAPI security daemon with the `SafetyAuditor` engine.
-- **`/frontend`**: High-fidelity "Methodology Showcase" dashboard.
-- **`/tests`**: Automated Pytest suite with 100% security path coverage.
-- **`/docs`**: Complete CA3 submission artifacts (Poster, Report, Tools, Defect Logs).
+## 2. Repository Structure
+* /backend: FastAPI security daemon with the SafetyAuditor engine.
+* /frontend: Methodology Showcase dashboard.
+* /tests: Automated Pytest suite with 100 percent security path coverage.
+* /docs: CA3 submission artifacts including the Technical Report and Poster.
 
-## 🧪 Quick Launch (Secure Lab)
-To launch the interactive testing suite and the messenger environment:
+## 3. Launch Instructions
+To launch the interactive testing suite and the messenger environment, execute the following command in PowerShell.
+
 ```powershell
 ./run_ca3_lab.ps1
 ```
 
-## 📖 Evaluation Documentation
-For evaluators, please refer to the following documents for rubric compliance:
-1. [🖼️ Case Study Poster](docs/poster.md) - System Overview & Strategy.
-2. [📝 Technical Report](docs/technical_report.md) - Methodology & 12-Point Matrix.
-3. [🛠️ Toolset Guide](docs/tools.md) - Automation with Selenium & Bugzilla.
-4. [🐞 Defect Case Study](docs/defect_report_001.md) - Bug Lifecycle & Analysis.
+## 4. Evaluation Documentation
+The following documents provide detailed compliance with the CA3 rubrics.
 
----
-**Focus Area**: Protecting minors from toxic slop and PII leaks through scientific software testing.
+1. Case Study Poster (docs/poster.md): System overview and testing strategy.
+2. Technical Report (docs/technical_report.md): Detailed 12-point matrix and execution strategies.
+3. Toolset Guide (docs/tools.md): Automation with Selenium and Bugzilla.
+4. Defect Case Study (docs/defect_report_001.md): Bug lifecycle and analysis.
