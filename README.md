@@ -1,8 +1,5 @@
 # STT Messenger | CA3 Software Testing Case Study
 
-![Security Banner](https://img.shields.io/badge/Security-Hardened-green?style=for-the-badge)
-![Testing Matrix](https://img.shields.io/badge/CA3--Matrix-12--Point-blue?style=for-the-badge)
-
 **STT Messenger** is a high-fidelity demonstration project for the CA3 Software Testing case study. It showcases how modern social media platforms can use rigorous testing methodologies—such as **Equivalence Partitioning (EP)**, **Boundary Value Analysis (BVA)**, and **Path Coverage**—to protect minors and vulnerable populations from toxic content and privacy leaks.
 
 ## 🚀 Key Features
