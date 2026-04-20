@@ -5,26 +5,17 @@ This directory contains the full submission artifacts for the CA3 Case Study on 
 
 ---
 
-## 📂 Submission Components
-
-### 🖼️ [Component A: Poster (Core Content)](file:///c:/Users/erics/Documents/Projects/AntiSlopAIMessenger-main/AntiSlopAIMessenger-main/STT Messenger CA3/docs/poster.md)
-The primary visual documentation of the testing strategy, design techniques (EP, BVA, Path Coverage), and dashboard quality metrics.
-
-### 📝 [Component B: Technical Report](file:///c:/Users/erics/Documents/Projects/AntiSlopAIMessenger-main/AntiSlopAIMessenger-main/STT Messenger CA3/docs/technical_report.md)
-A deep-dive into the Software Testing Life Cycle, Reflective Summary, and extended Defect Tracking Log.
-
----
 
 ## 🔬 Technical Proof & Artifacts
 The following scripts were implemented to verify the "Next Level" scientific rigor of this assignment:
 
-1.  **[Comprehensive Security Suite](file:///c:/Users/erics/Documents/Projects/AntiSlopAIMessenger-main/AntiSlopAIMessenger-main/STT Messenger CA3/tests/test_security.py)**: Automated Pytest verification of 100% of the Test Matrix.
-2.  **[Defect Report BUG-003](file:///c:/Users/erics/Documents/Projects/AntiSlopAIMessenger-main/AntiSlopAIMessenger-main/STT Messenger CA3/docs/defect_report_001.md)**: Formal Bugzilla report for the CSP/Connectivity fix discovered during system testing.
-3.  **[Tools Exploration](file:///c:/Users/erics/Documents/Projects/AntiSlopAIMessenger-main/AntiSlopAIMessenger-main/STT Messenger CA3/docs/tools.md)**: Details on Selenium and Bugzilla integration in the STLC.
+1.  **Comprehensive Security Suite**: Automated Pytest verification of 100% of the Test Matrix.
+2.  **Defect Report BUG-003**: Formal Bugzilla report for the CSP/Connectivity fix discovered during system testing.
+3.  **Tools Exploration**: Details on Selenium and Bugzilla integration in the STLC.
 
 ---
 
-## 📊 The 12-Point Security Matrix (Case Study Coverage)
+## The 12-Point Security Matrix (Case Study Coverage)
 
 | Sr.No | Security Gate | Category | Logic/Methodology | Pass Criteria |
 | :--- | :--- | :--- | :--- | :--- |
@@ -43,7 +34,7 @@ The following scripts were implemented to verify the "Next Level" scientific rig
 
 ---
 
-## ✅ How to Verify
+## How to Verify
 Run the full automated test suite from the project root:
 1. Navigate to: `STT Messenger CA3`
 2. Run: `python -m pytest tests/test_security.py -v`
