@@ -1,4 +1,4 @@
-# 🎓 CA3 Submission: Software Testing Case Study
+# CA3 Submission: Software Testing Case Study
 **Project**: STT Messenger (Minor Protection & Privacy Sovereignty)
 
 This directory contains the full submission artifacts for the CA3 Case Study on Software Testing Tools and Methodology.
@@ -6,7 +6,7 @@ This directory contains the full submission artifacts for the CA3 Case Study on 
 ---
 
 
-## 🔬 Technical Proof & Artifacts
+## Technical Proof & Artifacts
 The following scripts were implemented to verify the "Next Level" scientific rigor of this assignment:
 
 1.  **Comprehensive Security Suite**: Automated Pytest verification of 100% of the Test Matrix.
