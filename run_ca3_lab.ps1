@@ -1,7 +1,7 @@
-# 🚀 STT Messenger CA3 Edition Launcher
+# STT Messenger  Edition Launcher
 # Methodology: Architecture-first, Zero-deployment-friction.
 
-Write-Host "--- STT Messenger CA3 Secure Lab ---" -ForegroundColor Green
+Write-Host "--- STT Messenger Secure Lab ---" -ForegroundColor Green
 Write-Host "Cleaning environment..." -ForegroundColor Gray
 
 # 1. Kill any existing port 8000 process (Zombie Cleanup)

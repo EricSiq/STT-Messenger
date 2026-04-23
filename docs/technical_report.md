@@ -8,21 +8,20 @@ STT Messenger is a sovereign communication platform. It utilizes a backend secur
 
 ## 3. Test Case Matrix
 
-| Test Case Number | Test Case Description | Expected Input | Expected Output | Case for Success or Failure |
-| :--- | :--- | :--- | :--- | :--- |
-| TC-01 | Toxic content filter to prevent derogatory slurs and hate speech. | Any string containing a known toxic slur. | HTTP 422 Unprocessable Entity. | Success: Message blocked. Failure: Message stored. |
-| TC-02 | Personal Identifiable Information (PII) gate for phone and email. | Strings containing a 10 digit number or email address. | HTTP 422 Unprocessable Entity. | Success: PII intercepted. Failure: Data leak. |
-| TC-03 | Boundary Value Analysis (BVA) for maximum message payload. | A string with 10001 characters. | HTTP 422 Unprocessable Entity. | Success: Overflow blocked. Failure: Buffer risk. |
-| TC-04 | Sentiment analysis gate to detect hostile and predatory intent. | Sentences containing hostile keywords like murder or destroy. | HTTP 422 Unprocessable Entity. | Success: Hostility blocked. Failure: Tone allowed. |
-| TC-05 | System command injection protection for administrative integrity. | Messages starting with /sudo or rm -rf. | HTTP 422 Unprocessable Entity. | Success: Command blocked. Failure: Escalation. |
-| TC-06 | Scam and phishing protector for social media security. | URLs containing crypto-win or free-airdrop signatures. | HTTP 422 Unprocessable Entity. | Success: Fraud blocked. Failure: Link active. |
-| TC-07 | Temporal bot rate limiter for signal stability. | Five messages sent within a 0.5 second interval. | HTTP 422 Unprocessable Entity. | Success: Flow throttled. Failure: Bot swarm. |
-| TC-08 | Script injection and cross site scripting (XSS) prevention. | Strings containing script tags or onerror event handlers. | HTTP 422 Unprocessable Entity. | Success: Script blocked. Failure: Code execution. |
-| TC-10 | Malware signature detection for untrusted URI patterns. | Strings containing executable extensions like .exe or .sh. | HTTP 422 Unprocessable Entity. | Success: Payload blocked. Failure: Malware leak. |
-| TC-09 | Network identifier protection to prevent IP sovereignty leaks. | Strings containing IPv4 formatted address patterns. | HTTP 422 Unprocessable Entity. | Success: IP blocked. Failure: Trace allowed. |
-| TC-11 | Contextual doxing protection for physical location security. | Phrases combining live at with house numbers and street names. | HTTP 422 Unprocessable Entity. | Success: Location blocked. Failure: Trace allowed. |
-| TC-12 | Proactive safety gate for mental health and crisis support. | Strings containing self harm or crisis indicators. | HTTP 422 Unprocessable Entity. | Success: Support triggered. Failure: Signal stored. |
-
+| Test Case Number | Test Case Description                                                                 | Expected Input                                              | Expected Output                     | Case for Success or Failure                          |
+|------------------|----------------------------------------------------------------------------------------|-------------------------------------------------------------|-------------------------------------|------------------------------------------------------|
+| TC-01            | Toxic content filter to prevent derogatory slurs and hate speech.                    | Any string containing a known toxic slur.                   | HTTP 422 Unprocessable Entity.      | Success: Message blocked. Failure: Message stored.   |
+| TC-02            | Personal Identifiable Information (PII) gate for phone and email.                    | Strings containing a 10 digit number or email address.      | HTTP 422 Unprocessable Entity.      | Success: PII intercepted. Failure: Data leak.        |
+| TC-03            | Boundary Value Analysis (BVA) for maximum message payload.                           | A string with 10001 characters.                             | HTTP 422 Unprocessable Entity.      | Success: Overflow blocked. Failure: Buffer risk.     |
+| TC-04            | Sentiment analysis gate to detect hostile and predatory intent.                      | Sentences containing hostile keywords like murder or destroy. | HTTP 422 Unprocessable Entity.   | Success: Hostility blocked. Failure: Tone allowed.   |
+| TC-05            | System command injection protection for administrative integrity.                    | Messages starting with /sudo or rm -rf.                     | HTTP 422 Unprocessable Entity.      | Success: Command blocked. Failure: Escalation.       |
+| TC-06            | Scam and phishing protector for social media security.                               | URLs containing crypto-win or free-airdrop signatures.      | HTTP 422 Unprocessable Entity.      | Success: Fraud blocked. Failure: Link active.        |
+| TC-07            | Temporal bot rate limiter for signal stability.                                       | Five messages sent within a 0.5 second interval.            | HTTP 422 Unprocessable Entity.      | Success: Flow throttled. Failure: Bot swarm.         |
+| TC-08            | Script injection and cross site scripting (XSS) prevention.                          | Strings containing script tags or onerror event handlers.   | HTTP 422 Unprocessable Entity.      | Success: Script blocked. Failure: Code execution.    |
+| TC-10            | Malware signature detection for untrusted URI patterns.                              | Strings containing executable extensions like .exe or .sh.  | HTTP 422 Unprocessable Entity.      | Success: Payload blocked. Failure: Malware leak.     |
+| TC-09            | Network identifier protection to prevent IP sovereignty leaks.                       | Strings containing IPv4 formatted address patterns.         | HTTP 422 Unprocessable Entity.      | Success: IP blocked. Failure: Trace allowed.         |
+| TC-11            | Contextual doxing protection for physical location security.                         | Phrases combining live at with house numbers and street names. | HTTP 422 Unprocessable Entity.   | Success: Location blocked. Failure: Trace allowed.   |
+| TC-12            | Proactive safety gate for mental health and crisis support.                          | Strings containing self harm or crisis indicators.          | HTTP 422 Unprocessable Entity.      | Success: Support triggered. Failure: Signal stored.  |
 ## 4. Test Case Execution Strategy
 
 * TC-01 (Toxic Filter): The system normalizes the input by removing special characters and converts text to lowercase. It then performs an intersection check between the message words and a predefined toxic corpus.
